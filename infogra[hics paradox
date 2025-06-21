@@ -133,28 +133,28 @@
                         <h3 class="font-semibold text-[#004AAD]">הגדרה מחדש של המשימה</h3>
                         <p class="text-sm text-gray-600">שלבו יעדים חברתיים מפורשים בחזון המוזיאון.</p>
                     </div>
-                    <div class="flowchart-arrow hidden md:block mx-4">➔</div>
+                    <div class="flowchart-arrow hidden md:block mx-4"></div>
                     <div class="flowchart-arrow block md:hidden my-2">↓</div>
                     <div class="bg-white p-5 rounded-lg shadow-md flex-1 min-h-[150px] flex items-center justify-center flex-col">
                         <div class="text-3xl font-bold text-[#0079FF] mb-2">2</div>
                         <h3 class="font-semibold text-[#004AAD]">הערכת צרכים קהילתיים</h3>
                         <p class="text-sm text-gray-600">זהו באופן פרואקטיבי פערים חברתיים בסביבתכם.</p>
                     </div>
-                     <div class="flowchart-arrow hidden md:block mx-4">➔</div>
+                     <div class="flowchart-arrow hidden md:block mx-4"></div>
                     <div class="flowchart-arrow block md:hidden my-2">↓</div>
                     <div class="bg-white p-5 rounded-lg shadow-md flex-1 min-h-[150px] flex items-center justify-center flex-col">
                         <div class="text-3xl font-bold text-[#0079FF] mb-2">3</div>
                         <h3 class="font-semibold text-[#004AAD]">יצירה משותפת של תכנים</h3>
                         <p class="text-sm text-gray-600">ערבו את הקהילה בפיתוח תערוכות ותוכניות.</p>
                     </div>
-                     <div class="flowchart-arrow hidden md:block mx-4">➔</div>
+                     <div class="flowchart-arrow hidden md:block mx-4"></div>
                     <div class="flowchart-arrow block md:hidden my-2">↓</div>
                     <div class="bg-white p-5 rounded-lg shadow-md flex-1 min-h-[150px] flex items-center justify-center flex-col">
                         <div class="text-3xl font-bold text-[#0079FF] mb-2">4</div>
                         <h3 class="font-semibold text-[#004AAD]">מדידה ודיווח על השפעה</h3>
                         <p class="text-sm text-gray-600">הציגו לתורמים נתונים על שינוי חברתי מוחשי.</p>
                     </div>
-                     <div class="flowchart-arrow hidden md:block mx-4">➔</div>
+                     <div class="flowchart-arrow hidden md:block mx-4"></div>
                     <div class="flowchart-arrow block md:hidden my-2">↓</div>
                      <div class="bg-white p-5 rounded-lg shadow-md flex-1 min-h-[150px] flex items-center justify-center flex-col">
                         <div class="text-3xl font-bold text-[#0079FF] mb-2">5</div>
