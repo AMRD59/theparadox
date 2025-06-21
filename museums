@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>המדריך להשפעה: גיוס תרומות אפקטיבי למוזיאונים בישראל</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Chosen Palette: Calm Harmony (Stone, Amber, Sky Blue) -->
+    <!-- Application Structure Plan: A thematic, five-part journey designed for user discovery, moving from the core problem (The Philanthropic Shift) to the evidence (Donor Expectations, Communication Gap), and finally to a actionable solution (The Impact Playbook & Success Stories). This narrative-driven structure, rather than the report's academic layout, is chosen to be more engaging and persuasive for museum stakeholders, guiding them from understanding to action. -->
+    <!-- Visualization & Content Choices: 1. Philanthropy Trend (Table 1) -> Goal: Show Change -> Bar Chart (Chart.js) -> Interaction: Hover tooltips -> Justification: More compelling for trend analysis than a static table. 2. Foundation Criteria (Table 2) -> Goal: Inform/Organize -> Interactive Tabs (JS) -> Interaction: Click to reveal -> Justification: Breaks down dense information into manageable, user-controlled chunks. 3. Museum Messaging (Table 3) -> Goal: Compare -> Two-Panel Toggle (JS) -> Interaction: Click to switch between 'Implicit' and 'Explicit' impact language -> Justification: Creates a direct, high-impact comparison that highlights the core communication gap. 4. Recommendations -> Goal: Guide -> Step-by-step interactive diagram (HTML/CSS/JS) -> Interaction: Click to expand details -> Justification: Transforms a list into an actionable, engaging playbook. All textual content is condensed and contextualized within these interactive sections. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <style>
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            font-family: 'Heebo', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+            max-height: 450px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 450px;
+            }
+        }
+        .section-title {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: #1e293b;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: #475569;
+            max-width: 48rem;
+            margin: 0 auto 3rem auto;
+            text-align: center;
+            line-height: 1.8;
+        }
+        .tab.active {
+            border-color: #0369a1;
+            background-color: #f0f9ff;
+            color: #0369a1;
+            font-weight: 600;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .playbook-step {
+            transition: all 0.3s ease-in-out;
+        }
+        .playbook-step.active {
+            transform: scale(1.05);
+            box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            border-color: #f59e0b;
+        }
+        .playbook-arrow {
+            color: #d1d5db;
+            align-self: center;
+            font-size: 2rem;
+            margin: 0 1rem;
+        }
+        .comparison-toggle.active {
+            background-color: #0c4a6e;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-stone-50 text-stone-800">
+
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+        <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+                <div class="flex items-center">
+                    <span class="font-bold text-xl text-sky-800">המדריך להשפעה</span>
+                </div>
+                <div class="hidden md:block">
+                    <div class="ml-10 flex items-baseline space-x-4 space-x-reverse">
+                        <a href="#problem" class="text-gray-500 hover:text-sky-700 px-3 py-2 rounded-md text-sm font-medium">השינוי</a>
+                        <a href="#donors" class="text-gray-500 hover:text-sky-700 px-3 py-2 rounded-md text-sm font-medium">התורמים</a>
+                        <a href="#gap" class="text-gray-500 hover:text-sky-700 px-3 py-2 rounded-md text-sm font-medium">הפער</a>
+                        <a href="#playbook" class="text-gray-500 hover:text-sky-700 px-3 py-2 rounded-md text-sm font-medium">הפתרון</a>
+                        <a href="#success" class="text-gray-500 hover:text-sky-700 px-3 py-2 rounded-md text-sm font-medium">הצלחות</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="py-12">
+        <section id="hero" class="text-center py-16 px-4 bg-white">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-sky-900 mb-4">הפער בגיוס תרומות: מדוע מוזיאונים בישראל מתקשים?</h1>
+            <p class="text-xl md:text-2xl text-amber-700 font-semibold mb-6">התשובה טמונה במילה אחת: השפעה.</p>
+            <p class="max-w-3xl mx-auto text-lg text-slate-600">הדוח מאשש כי עולם הפילנתרופיה השתנה. תורמים היום דורשים לראות תוצאות חברתיות ברורות ומדידות. אפליקציה זו מפרקת את ממצאי הדוח, מנתחת את הגורמים ומציעה מדריך מעשי למוזיאונים המעוניינים לגייס יותר כספים על ידי הפיכתם לסוכני שינוי חברתי מוכחים.</p>
+        </section>
+
+        <section id="problem" class="py-20 px-4">
+            <h2 class="section-title">השטח המשתנה: עולם הפילנתרופיה עבר מהפכה</h2>
+            <p class="section-subtitle">
+                המודל הישן של תרומה כללית למוסדות קהילתיים גדולים מתחלף. תורמים היום, במיוחד בארה"ב, מעדיפים לתת באופן ישיר לפרויקטים ספציפיים, ודורשים לראות שקיפות מלאה ו"החזר על ההשקעה" החברתית שלהם (Social ROI). הם רוצים לדעת בדיוק לאן הכסף הולך ואיזו השפעה מדידה הוא יוצר.
+            </p>
+            <div class="max-w-4xl mx-auto bg-white p-6 rounded-xl shadow-lg">
+                <h3 class="text-xl font-bold text-center mb-4 text-slate-700">מגמת הביזור: מעבר מכוח קהילתי לשליטת התורם (תרומות מארה"ב לעמותות בישראל, 2015-2021)</h3>
+                <div class="chart-container">
+                    <canvas id="philanthropyChart"></canvas>
+                </div>
+                <p class="text-center mt-4 text-sm text-slate-500">התרשים, המבוסס על נתוני דוח המומחה, ממחיש את הירידה בחלקם של מוסדות קהילתיים מרכזיים (כמו פדרציות) לעומת העלייה הדרמטית בכוחם של "ארגוני ידידים" וקרנות ייעוץ לתורמים (DAFs), המאפשרים תרומה ממוקדת. המוזיאונים צריכים לפנות ישירות לתורמים אלה בשפתם - שפת האימפקט.</p>
+            </div>
+        </section>
+        
+        <section id="donors" class="py-20 px-4 bg-sky-50/50">
+            <h2 class="section-title">מה תורמים מחפשים? קריטריוני ההשפעה של קרנות מובילות</h2>
+            <p class="section-subtitle">
+                הדרישה להשפעה חברתית אינה רק מגמה עולמית, היא הסטנדרט החדש בקרב הקרנות הפילנתרופיות הגדולות הפועלות בישראל. הן מחפשות ארגונים, כולל מוסדות תרבות, שפועלים באופן אקטיבי ליצירת שינוי חברתי מדיד וברור. לחצו על שם הקרן כדי לראות את דגשי ההשפעה שלה, כפי שמופיעים בדוח.
+            </p>
+            <div class="max-w-5xl mx-auto">
+                <div class="flex flex-wrap justify-center gap-2 md:gap-4 mb-8" id="foundationTabs">
+                    <button data-tab="azrieli" class="tab active border-b-2 px-4 py-2 text-sm md:text-base text-slate-600 transition">קרן עזריאלי</button>
+                    <button data-tab="rayne" class="tab border-b-2 px-4 py-2 text-sm md:text-base text-slate-600 transition">קרן ריין</button>
+                    <button data-tab="ruderman" class="tab border-b-2 px-4 py-2 text-sm md:text-base text-slate-600 transition">קרן רודרמן</button>
+                    <button data-tab="nif" class="tab border-b-2 px-4 py-2 text-sm md:text-base text-slate-600 transition">הקרן החדשה לישראל</button>
+                </div>
+                <div id="foundationContent" class="bg-white p-8 rounded-xl shadow-lg min-h-[200px] flex items-center justify-center transition-all duration-300">
+                    <div id="azrieliContent" class="tab-content active text-center">
+                        <h3 class="text-2xl font-bold text-sky-800 mb-2">קרן עזריאלי</h3>
+                        <p class="text-lg text-slate-600">"מטרה להשיג <span class="font-bold text-amber-600">השפעה מדידה</span> בתחומי המימון העדיפים... <span class="font-bold text-amber-600">העצמה</span>... תרומה לחברה."</p>
+                    </div>
+                    <div id="rayneContent" class="tab-content text-center">
+                        <h3 class="text-2xl font-bold text-sky-800 mb-2">קרן ריין</h3>
+                        <p class="text-lg text-slate-600">"אמנות ככלי להשגת <span class="font-bold text-amber-600">שינוי חברתי</span>... פרויקטים עם <span class="font-bold text-amber-600">השפעה חיובית ברורה</span> על חיי אנשים."</p>
+                    </div>
+                    <div id="rudermanContent" class="tab-content text-center">
+                        <h3 class="text-2xl font-bold text-sky-800 mb-2">קרן רודרמן</h3>
+                        <p class="text-lg text-slate-600">"פילנתרופיה אסטרטגית... השגת <span class="font-bold text-amber-600">תועלת חברתית מקסימלית</span>... קידום <span class="font-bold text-amber-600">הכלה</span>."</p>
+                    </div>
+                    <div id="nifContent" class="tab-content text-center">
+                        <h3 class="text-2xl font-bold text-sky-800 mb-2">הקרן החדשה לישראל</h3>
+                        <p class="text-lg text-slate-600">"תמיכה ב<span class="font-bold text-amber-600">שינוי חברתי</span>... חיזוק הדמוקרטיה וקידום <span class="font-bold text-amber-600">צדק חברתי וכלכלי</span>."</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="gap" class="py-20 px-4 bg-white">
+            <h2 class="section-title">פער התקשורת: איך מוזיאונים מדברים (ואיך הם צריכים לדבר)</h2>
+            <p class="section-subtitle">
+                הבעיה היא לא שמוזיאונים אינם תורמים לחברה, אלא שהם לא מתקשרים את הערך הזה בשפה הנכונה. הדוח מצא פער משמעותי בין הנרטיבים של מוזיאונים ישראלים לבין אלו של מובילים בינלאומיים. השתמשו בכפתורים כדי להשוות בין הגישות ולראות את ההבדל בבירור.
+            </p>
+            <div class="max-w-6xl mx-auto">
+                 <div class="flex justify-center mb-8">
+                    <div class="inline-flex rounded-md shadow-sm">
+                        <button id="toggleImplicit" class="comparison-toggle active relative inline-flex items-center px-6 py-3 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-sky-500 focus:border-sky-500">
+                            גישה מרומזת (ישראל)
+                        </button>
+                        <button id="toggleExplicit" class="comparison-toggle -ml-px relative inline-flex items-center px-6 py-3 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:z-10 focus:outline-none focus:ring-1 focus:ring-sky-500 focus:border-sky-500">
+                           גישה מפורשת (בינלאומי)
+                        </button>
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 gap-8">
+                    <div id="implicitCard" class="border border-gray-200 rounded-xl p-8 bg-stone-50 transition-opacity duration-500">
+                        <h3 class="text-2xl font-bold text-center mb-4 text-slate-700">הגישה הרווחת בישראל: <span class="font-normal">ערך חברתי מרומז</span></h3>
+                        <div class="space-y-4 text-slate-600 text-lg">
+                            <p>  "קידום אמנות, חינוך ותרבות"</p>
+                            <p>💬 "שימור מורשת תרבותית ישראלית"</p>
+                            <p>💬 "העשרה קהילתית"</p>
+                            <p>💬 "מרכז תרבותי המושך מבקרים מכל הגילאים"</p>
+                            <p class="mt-6 p-4 bg-amber-50 rounded-lg text-amber-800"><strong>הפער:</strong> נרטיבים אלו חשובים, אך הם אינם מציגים תוצאה חברתית ישירה וניתנת למדידה. הם מתארים <span class="font-semibold">פעילות</span>, לא <span class="font-semibold">השפעה</span>. הם משאירים לתורם לנחש את הערך הסופי.</p>
+                        </div>
+                    </div>
+                    <div id="explicitCard" class="hidden border-2 border-sky-600 rounded-xl p-8 bg-sky-50 transition-opacity duration-500">
+                        <h3 class="text-2xl font-bold text-center mb-4 text-sky-800">המודל הבינלאומי: <span class="font-normal">ערך חברתי מפורש</span></h3>
+                         <div class="space-y-4 text-sky-900 text-lg">
+                            <p>🎯 "כוח רב עוצמה לטרנספורמציה אישית ו<span class="font-semibold">שינוי חברתי</span>" (מוזיאון ברוקלין)</p>
+                            <p>🎯 "קידום <span class="font-semibold">שינוי חיובי, דיאלוג ומעורבות</span>" (טייט מודרן)</p>
+                            <p>🎯 "עיסוק פעיל בסוגיות כמו <span class="font-semibold">צדק אקלימי ופיתוח כלכלי</span>" (מוזיאון ברוקלין)</p>
+                            <p>🎯 "חיזוק תוכניות חינוך ו<span class="font-semibold">הבטחת נגישות לכולם</span>" (זייץ מוקאא)</p>
+                            <p class="mt-6 p-4 bg-green-50 rounded-lg text-green-800"><strong>ההזדמנות:</strong> אימוץ שפה זו מאפשר להתחבר ישירות לקריטריונים של התורמים ולהציג "החזר על ההשקעה" חברתי ברור ומשכנע.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="playbook" class="py-20 px-4 bg-stone-100">
+            <h2 class="section-title">הדרך קדימה: המדריך המעשי להשפעה</h2>
+            <p class="section-subtitle">
+                מעבר מנרטיב של שימור לנרטיב של השפעה דורש שינוי אסטרטגי. זה לא רק שינוי שפה, אלא שינוי תפיסה ופעולה. להלן חמשת הצעדים המעשיים המבוססים על המלצות הדוח. לחצו על כל שלב לקבלת פרטים נוספים.
+            </p>
+            <div class="max-w-6xl mx-auto">
+                <div class="flex flex-col md:flex-row items-center justify-center md:space-x-4 md:space-x-reverse space-y-4 md:space-y-0" id="playbookSteps">
+                    <div data-playbook="1" class="playbook-step text-center p-4 border-2 border-transparent rounded-lg cursor-pointer bg-white shadow-sm w-full md:w-1/5 active">
+                        <div class="text-3xl mb-2">1️⃣</div><h3 class="font-bold">הגדרה</h3>
+                    </div>
+                    <div class="playbook-arrow hidden md:block">→</div>
+                    <div data-playbook="2" class="playbook-step text-center p-4 border-2 border-transparent rounded-lg cursor-pointer bg-white shadow-sm w-full md:w-1/5">
+                        <div class="text-3xl mb-2">2️⃣</div><h3 class="font-bold">מדידה</h3>
+                    </div>
+                    <div class="playbook-arrow hidden md:block">→</div>
+                    <div data-playbook="3" class="playbook-step text-center p-4 border-2 border-transparent rounded-lg cursor-pointer bg-white shadow-sm w-full md:w-1/5">
+                        <div class="text-3xl mb-2">3️⃣</div><h3 class="font-bold">שותפויות</h3>
+                    </div>
+                    <div class="playbook-arrow hidden md:block">→</div>
+                    <div data-playbook="4" class="playbook-step text-center p-4 border-2 border-transparent rounded-lg cursor-pointer bg-white shadow-sm w-full md:w-1/5">
+                        <div class="text-3xl mb-2">4️⃣</div><h3 class="font-bold">תקשור</h3>
+                    </div>
+                     <div class="playbook-arrow hidden md:block">→</div>
+                    <div data-playbook="5" class="playbook-step text-center p-4 border-2 border-transparent rounded-lg cursor-pointer bg-white shadow-sm w-full md:w-1/5">
+                        <div class="text-3xl mb-2">5️⃣</div><h3 class="font-bold">חדשנות</h3>
+                    </div>
+                </div>
+                <div id="playbookDetails" class="mt-8 bg-white p-8 rounded-xl shadow-lg min-h-[150px] transition-all duration-300">
+                    <div id="playbook-1-details" class="playbook-details-content">
+                        <h4 class="font-bold text-xl text-sky-800">הגדרת משימה חברתית מפורשת</h4>
+                        <p class="text-slate-600 mt-2">בצעו מיפוי פנימי כדי להגדיר כיצד פעילויות הליבה שלכם (תערוכות, חינוך) תורמות לתוצאות חברתיות ספציפיות: קידום סובלנות, טיפוח חוסן קהילתי, תמיכה בחינוך או טיפול בטראומה. שלבו את השפה של "שינוי חברתי" ו"הכלה" בהצהרת המשימה שלכם.</p>
+                    </div>
+                     <div id="playbook-2-details" class="playbook-details-content hidden">
+                        <h4 class="font-bold text-xl text-sky-800">פיתוח מדידת השפעה ודיווח</h4>
+                        <p class="text-slate-600 mt-2">עברו ממדידת תפוקות (מספר מבקרים) למדידת תוצאות (שינוי בעמדות, פיתוח מיומנויות). השתמשו בסקרים, קבוצות מיקוד ואיסוף עדויות כדי להמחיש את ההשפעה. צרו דוחות השפעה שקופים וברורים לתורמים.</p>
+                    </div>
+                    <div id="playbook-3-details" class="playbook-details-content hidden">
+                        <h4 class="font-bold text-xl text-sky-800">בניית שותפויות אסטרטגיות</h4>
+                        <p class="text-slate-600 mt-2">שתפו פעולה עם ארגוני רווחה, מוסדות חינוך וגופים ממשלתיים. צרו פרויקטים משותפים הממקמים את המוזיאון כחלק מפתרון מערכתי רחב יותר לבעיות חברתיות, וצאו מחוץ לכותלי המוזיאון לקהילות מודרות.</p>
+                    </div>
+                     <div id="playbook-4-details" class="playbook-details-content hidden">
+                        <h4 class="font-bold text-xl text-sky-800">תקשור הנרטיב החדש</h4>
+                        <p class="text-slate-600 mt-2">נסחו מחדש את פניות גיוס התרומות. במקום לבקש תמיכה כללית, הציעו לתורמים "להשקיע" בפרויקטים ספציפיים עם השפעה חברתית ברורה. הדגישו את "ההחזר על ההשקעה" החברתי שהתרומה שלהם תייצר.</p>
+                    </div>
+                     <div id="playbook-5-details" class="playbook-details-content hidden">
+                        <h4 class="font-bold text-xl text-sky-800">חדשנות בתוכניות ובמודלים</h4>
+                        <p class="text-slate-600 mt-2">פתחו תוכניות חדשניות המשלבות אמנות עם מענה לצרכים חברתיים דחופים, כגון סדנאות אמנות לטיפול בטראומה, תוכניות העצמה לנוער בסיכון באמצעות יצירה, או תערוכות המעוררות דיאלוג על סוגיות רגישות.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section id="success" class="py-20 px-4 bg-white">
+            <h2 class="section-title">זה אפשרי: סיפורי הצלחה מהשטח הישראלי</h2>
+            <p class="section-subtitle">
+                המעבר להשפעה חברתית אינו תיאורטי. כפי שמציין הדוח, מוסדות וארגונים בישראל כבר מיישמים גישה זו בהצלחה, מוכיחים את השפעתם וזוכים להכרה ולתמיכה. הם מהווים מודל והשראה למה שאפשרי כאשר תרבות ושינוי חברתי נפגשים.
+            </p>
+            <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-stone-50 p-6 rounded-xl shadow-md flex flex-col">
+                    <h3 class="font-bold text-lg text-sky-800 mb-2">פרויקט החוסן היהודי של מוזיאון אנו</h3>
+                    <p class="text-slate-600 flex-grow">המוזיאון פיתח והפעיל תוכנית אקטיבית לסייע בהתגברות על טראומה ולעודד אחדות, במיוחד לאחר ה-7 באוקטובר. זהו מקרה מובהק של מוזיאון הממנף את נכסיו התרבותיים כדי לייצר ריפוי ולכידות חברתית מדידה.</p>
+                </div>
+                <div class="bg-stone-50 p-6 rounded-xl shadow-md flex flex-col">
+                    <h3 class="font-bold text-lg text-sky-800 mb-2">"פרויקט ההעצמה" של אוניברסיטת בר-אילן</h3>
+                    <p class="text-slate-600 flex-grow">תוכנית זו לתלמידים עם מוגבלויות שכליות מתמקדת במפורש בהכלה וזכתה להכרה בערכה החברתי המשמעותי. היא מדגימה כיצד מוסד חינוכי יכול ליצור השפעה ישירה ומוכרת על חייהם של אנשים.</p>
+                </div>
+                <div class="bg-stone-50 p-6 rounded-xl shadow-md flex flex-col">
+                    <h3 class="font-bold text-lg text-sky-800 mb-2">הנרטיב המתפתח של מוזיאון ישראל</h3>
+                     <p class="text-slate-600 flex-grow">בתגובה למשבר, הנהלת המוזיאון החלה לנסח במפורש את תפקידו ב"ריפוי ואיחוד", במתן "נווה מדבר" וב"עידוד דיאלוג בין-תרבותי". זהו סימן להתאמה אסטרטגית המכירה בצורך לדבר בשפת ההשפעה החברתית.</p>
+                </div>
+                 <div class="bg-stone-50 p-6 rounded-xl shadow-md flex flex-col">
+                    <h3 class="font-bold text-lg text-sky-800 mb-2">תוכנית Honeycomb של JFN</h3>
+                     <p class="text-slate-600 flex-grow">תוכנית זו מלמדת פילנתרופיה לבני נוער. מחקרים מראים כי 82% מהמשתתפים אימצו את ערך "תיקון עולם", לעומת 3% בלבד בקבוצת הביקורת - הוכחה כמותית להשפעה על ערכים ומעורבות אזרחית.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <footer class="bg-slate-800 text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p>&copy; 2024 המדריך להשפעה. אפליקציה זו נוצרה כדי להמחיש את ממצאי דוח המומחה.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Philanthropy Chart
+            const philanthropyCtx = document.getElementById('philanthropyChart').getContext('2d');
+            const philanthropyData = {
+                labels: ['2015', '2021'],
+                datasets: [
+                    {
+                        label: 'ארגוני "ידידים" (%)',
+                        data: [43, 45],
+                        backgroundColor: 'rgba(56, 189, 248, 0.6)',
+                        borderColor: 'rgba(56, 189, 248, 1)',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'מוסדות קהילתיים (JCI) (%)',
+                        data: [37, 29],
+                        backgroundColor: 'rgba(203, 213, 225, 0.6)',
+                        borderColor: 'rgba(203, 213, 225, 1)',
+                        borderWidth: 1
+                    }
+                ]
+            };
+            new Chart(philanthropyCtx, {
+                type: 'bar',
+                data: philanthropyData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'אחוז מסך התרומות מארה"ב'
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.y !== null) {
+                                        label += context.parsed.y + '%';
+                                    }
+                                    return " " + label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Foundation Tabs
+            const tabs = document.querySelectorAll('.tab');
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const target = tab.dataset.tab;
+                    
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        if (content.id === `${target}Content`) {
+                            content.classList.add('active');
+                        }
+                    });
+                });
+            });
+
+            // Comparison Toggle
+            const toggleImplicit = document.getElementById('toggleImplicit');
+            const toggleExplicit = document.getElementById('toggleExplicit');
+            const implicitCard = document.getElementById('implicitCard');
+            const explicitCard = document.getElementById('explicitCard');
+
+            toggleImplicit.addEventListener('click', () => {
+                toggleImplicit.classList.add('active');
+                toggleExplicit.classList.remove('active');
+                implicitCard.classList.remove('hidden');
+                explicitCard.classList.add('hidden');
+            });
+
+            toggleExplicit.addEventListener('click', () => {
+                toggleExplicit.classList.add('active');
+                toggleImplicit.classList.remove('active');
+                explicitCard.classList.remove('hidden');
+                implicitCard.classList.add('hidden');
+            });
+
+
+            // Playbook Steps
+            const playbookSteps = document.querySelectorAll('.playbook-step');
+            const playbookDetails = document.querySelectorAll('.playbook-details-content');
+            playbookSteps.forEach(step => {
+                step.addEventListener('click', () => {
+                    const target = step.dataset.playbook;
+
+                    playbookSteps.forEach(s => s.classList.remove('active'));
+                    step.classList.add('active');
+                    
+                    playbookDetails.forEach(detail => {
+                         if (detail.id === `playbook-${target}-details`) {
+                            detail.classList.remove('hidden');
+                        } else {
+                            detail.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+           // Show first playbook step by default
+             document.getElementById('playbook-1-details').classList.remove('hidden');
+        });
+    </script>
+
+</body>
+</html>
+ 
